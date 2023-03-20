@@ -1,7 +1,6 @@
 package academy
 
 import (
-	"golang.org/x/exp/constraints"
 	"math"
 )
 
@@ -12,28 +11,18 @@ type Student struct {
 	Attendance []bool
 }
 
-type Number interface {
-	constraints.Float | constraints.Integer
-}
-
-// CalculateAverageFromSlice returns an average from given slice containing
-// numeric values rounded to the nearest int value.
-func CalculateAverageFromSlice[T Number](slice []T) int {
-	if len(slice) == 0 {
-		return 0
-	}
-	var sum T
-	for _, d := range slice {
-		sum += d
-	}
-	return int(math.Round(float64(sum) / float64(len(slice))))
-}
-
 // AverageGrade returns an average grade given a
 // slice containing all grades received during a
 // semester, rounded to the nearest integer.
 func AverageGrade(grades []int) int {
-	return CalculateAverageFromSlice(grades)
+	if len(grades) == 0 {
+		return 0
+	}
+	var sum int
+	for _, grade := range grades {
+		sum += grade
+	}
+	return int(math.Round(float64(sum) / float64(len(grades))))
 }
 
 // Count returns amount of elements in slice satisfying the given predicate
@@ -82,12 +71,12 @@ func FinalGrade(s Student) int {
 		return 1
 	}
 
-	finalGrade := CalculateAverageFromSlice([]int{s.Project, studentAverageGrade})
+	finalGrade := float64(s.Project+studentAverageGrade) / 2
 
 	if studentAttendance <= 0.79 {
 		finalGrade--
 	}
-	return finalGrade
+	return int(math.Round(finalGrade))
 }
 
 // GradeStudents returns a map of final grades for a given slice of
