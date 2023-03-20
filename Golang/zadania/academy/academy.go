@@ -41,8 +41,7 @@ func Count[T any](slice []T, predicate func(T) bool) int {
 // whether a student was present (true) of absent (false).
 //
 // The percentage of attendance is represented as a
-// floating-point number ranging from  0 to 1,
-// with 2 digits of precision.
+// floating-point number ranging from 0 to 1.
 func AttendancePercentage(attendance []bool) float64 {
 	if len(attendance) == 0 {
 		return 0.0
