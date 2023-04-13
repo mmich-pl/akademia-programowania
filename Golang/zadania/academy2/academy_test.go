@@ -176,3 +176,27 @@ func TestGradeStudent(t *testing.T) {
 		})
 	}
 }
+
+func TestGradeThirdYearStudent(t *testing.T) {
+	mockRepository := NewMockRepository(t)
+	mockStudent := NewMockStudent(t)
+	mockRepository.On("Get", "John Doe").Return(mockStudent, nil)
+	mockStudent.On("FinalGrade").Return(5)
+	mockStudent.On("Year").Return(uint8(3))
+	mockStudent.On("Name").Return("John Doe")
+
+	mockRepository.On("Graduate", "John Doe").Return(nil)
+
+	got := GradeStudent(mockRepository, "John Doe")
+	assert.NoError(t, got)
+}
+
+func TestGradeWrongGrades(t *testing.T) {
+	mockRepository := NewMockRepository(t)
+	mockStudent := NewMockStudent(t)
+	mockRepository.On("Get", "John Doe").Return(mockStudent, nil)
+	mockStudent.On("FinalGrade").Return(0)
+
+	got := GradeStudent(mockRepository, "John Doe")
+	assert.Error(t, got)
+}
